@@ -6,6 +6,7 @@ ENVIRONMENT = bool(os.environ.get('ENVIRONMENT', False))
 
 if ENVIRONMENT:
     try:
+        class Configs:
         API_ID = int(os.environ.get('API_ID', 0))
     except ValueError:
         raise Exception("Your API_ID is not a valid integer.")
