@@ -29,7 +29,12 @@
       "description": "Obtain a Telegram bot token by contacting @BotFather",
       "required": true,
       "value": ""
-    }
+    },
+    "OWNER_ID": {
+      "description": "Obtain a Telegram bot token by contacting @BotFather",
+      "required": true,
+      "value": ""
+    } 
   },
   "buildpacks": [{
     "url": "heroku/python"
