@@ -1,0 +1,8 @@
+pyrogram
+TgCrypto
+py-tgcalls
+bs4
+python-dotenv
+gitpython
+pytz
+APScheduler
