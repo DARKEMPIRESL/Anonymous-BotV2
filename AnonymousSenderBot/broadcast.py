@@ -5,7 +5,7 @@ from database.userchats import get_all_chats
 from config import configs
 
 
-@Client.on_message(filters.command("broadcast") & filters.user(int(var.OWNER_ID)))
+@Client.on_message(filters.command("broadcast") & filters.user(configs.OWNER_ID)))
 async def bcast(client, message):
     if message.reply_to_message:
         MSG = message.reply_to_message
@@ -34,7 +34,7 @@ async def bcast(client, message):
     await m.delete()
 
 
-@Client.on_message(filters.command("stats") & filters.user(int(var.OWNER_ID)))
+@Client.on_message(filters.command("stats") & filters.user(configs.OWNER_ID)))
 async def gistat(_, message):
     al = get_all_chats()
     await message.reply_text(f"Total Chats in Database - {len(al)}", quote=True)
