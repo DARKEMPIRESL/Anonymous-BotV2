@@ -12,9 +12,8 @@ if ENVIRONMENT:
     API_HASH = os.environ.get('API_HASH', None)
     BOT_TOKEN = os.environ.get('BOT_TOKEN', None)
     OWNER_ID = os.environ.get('OWNER_ID', None)
-    DATABASE_URL = os.environ.get('DATABASE_URL', None)
-    DATABASE_URL = DATABASE_URL.replace("postgres", "postgresql")  # Sqlalchemy dropped support for "postgres" name.
-    # https://stackoverflow.com/questions/62688256/sqlalchemy-exc-nosuchmoduleerror-cant-load-plugin-sqlalchemy-dialectspostgre
+    REDIS_URI = os.getenv("REDIS_URI", None)
+    REDIS_PASS = os.getenv("REDIS_PASS", None)
     MUST_JOIN = os.environ.get('MUST_JOIN', None)
     if MUST_JOIN.startswith("@"):
         MUST_JOIN = MUST_JOIN.replace("@", "")
@@ -24,10 +23,11 @@ else:
     API_HASH = ""
     BOT_TOKEN = ""
     OWNER_ID = ""
-    DATABASE_URL = ""
-    DATABASE_URL = DATABASE_URL.replace("postgres", "postgresql")
+    REDIS_URI = ""
+    REDIS_PASS = ""
     MUST_JOIN = "SLBotOfficial"
     if MUST_JOIN.startswith("@"):
         MUST_JOIN = MUST_JOIN[1:]
 
 DEVS = [1120271521]
+configs = configs()
