@@ -1,7 +1,7 @@
 import ast
 import redis
 
-from vars import var
+import config
 
 INFO = var.REDIS_URI.split(":")
 
