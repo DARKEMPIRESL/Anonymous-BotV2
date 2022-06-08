@@ -12,9 +12,7 @@ if ENVIRONMENT:
     OWNER_ID = os.environ.get('OWNER_ID', None)
     REDIS_URI = os.getenv("REDIS_URI", None)
     REDIS_PASS = os.getenv("REDIS_PASS", None)
-    MUST_JOIN = os.environ.get('MUST_JOIN', None)
-    if MUST_JOIN.startswith("@"):
-        MUST_JOIN = MUST_JOIN.replace("@", "")
+
 else:
     # Fill the Values
     API_ID = 0
@@ -23,9 +21,7 @@ else:
     OWNER_ID = ""
     REDIS_URI = ""
     REDIS_PASS = ""
-    MUST_JOIN = "SLBotOfficial"
-    if MUST_JOIN.startswith("@"):
-        MUST_JOIN = MUST_JOIN[1:]
+
 
 DEVS = [1120271521]
 
