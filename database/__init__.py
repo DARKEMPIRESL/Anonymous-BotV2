@@ -6,7 +6,7 @@ import os
 REDIS_URI = os.getenv("REDIS_URI", None)
 REDIS_PASS = os.getenv("REDIS_PASS", None)
 
-INFO = var.REDIS_URI.split(":")
+INFO = REDIS_URI.split(":")
 
 DB = redis.StrictRedis(
     host=INFO[0],
