@@ -4,19 +4,20 @@ import os
 
 ENVIRONMENT = bool(os.environ.get('ENVIRONMENT', False))
 
-if ENVIRONMENT:
-    class Configs:
-    try:
-        API_ID = int(os.environ.get('API_ID', 0))
-    except ValueError:
-        raise Exception("Your API_ID is not a valid integer.")
-    API_HASH = os.environ.get('API_HASH', None)
-    BOT_TOKEN = os.environ.get('BOT_TOKEN', None)
-    OWNER_ID = int(getenv("OWNER_ID", "0123"))
+if path.exists("local.env"):
+    load_dotenv("local.env")
 else:
-    # Fill the Values
-    API_ID = 0
-    API_HASH = ""
-    BOT_TOKEN = ""
+    load_dotenv()
+
+if not path.exists("search"):
+    mkdir("search")
+
+
+class Configs:
+    API_ID = int(getenv("API_ID", "0"))
+    API_HASH = getenv("API_HASH", "abc123")
+    BOT_TOKEN = getenv("BOT_TOKEN", "123:abc")
+    OWNER_ID = int(getenv("OWNER_ID", "0123"))
+
 
 config = Configs()
