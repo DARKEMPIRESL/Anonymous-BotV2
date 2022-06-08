@@ -1,7 +1,10 @@
 import ast
 import redis
 
-from vars import var
+import os
+
+REDIS_URI = os.getenv("REDIS_URI", None)
+REDIS_PASS = os.getenv("REDIS_PASS", None)
 
 INFO = var.REDIS_URI.split(":")
 
