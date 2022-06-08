@@ -34,7 +34,15 @@
       "description": "Obtain a Telegram bot token by contacting @BotFather",
       "required": true,
       "value": ""
-    } 
+    },
+    "REDIS_URI": {
+      "description": "Redis URL, Get it from redislabs.com",
+      "value": ""
+    },
+    "REDIS_PASS": {
+      "description": "Redis Password, Get it from redislabs.com",
+      "value": ""
+    }
   },
   "buildpacks": [{
     "url": "heroku/python"
