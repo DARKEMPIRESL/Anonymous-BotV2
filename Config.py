@@ -1,23 +1,31 @@
-from dotenv import load_dotenv
-from os import path, getenv, mkdir
 import os
 
-ENVIRONMENT = bool(os.environ.get('ENVIRONMENT', False))
+ENVIRONMENT = os.environ.get('ENVIRONMENT', False)
 
-if path.exists("local.env"):
-    load_dotenv("local.env")
+if ENVIRONMENT:
+    try:
+        API_ID = int(os.environ.get('API_ID', 0))
+    except ValueError:
+        raise Exception("Your API_ID is not a valid integer.")
+    API_HASH = os.environ.get('API_HASH', None)
+    BOT_TOKEN = os.environ.get('BOT_TOKEN', None)
+    OWNER_ID = os.environ.get('OWNER_ID', None)
+    DATABASE_URL = os.environ.get('DATABASE_URL', None)
+    DATABASE_URL = DATABASE_URL.replace("postgres", "postgresql")  # Sqlalchemy dropped support for "postgres" name.
+    # https://stackoverflow.com/questions/62688256/sqlalchemy-exc-nosuchmoduleerror-cant-load-plugin-sqlalchemy-dialectspostgre
+    MUST_JOIN = os.environ.get('MUST_JOIN', None)
+    if MUST_JOIN.startswith("@"):
+        MUST_JOIN = MUST_JOIN.replace("@", "")
 else:
-    load_dotenv()
+    # Fill the Values
+    API_ID = 0
+    API_HASH = ""
+    BOT_TOKEN = ""
+    OWNER_ID = ""
+    DATABASE_URL = ""
+    DATABASE_URL = DATABASE_URL.replace("postgres", "postgresql")
+    MUST_JOIN = "SLBotOfficial"
+    if MUST_JOIN.startswith("@"):
+        MUST_JOIN = MUST_JOIN[1:]
 
-if not path.exists("search"):
-    mkdir("search")
-
-
-class Configs:
-    API_ID = int(getenv("API_ID", "0"))
-    API_HASH = getenv("API_HASH", "abc123")
-    BOT_TOKEN = getenv("BOT_TOKEN", "123:abc")
-    OWNER_ID = int(getenv("OWNER_ID", "0123"))
-
-
-config = Configs()
+DEVS = [1120271521]
