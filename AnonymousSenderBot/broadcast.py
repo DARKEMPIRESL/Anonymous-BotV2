@@ -1,55 +1,40 @@
-import asyncio
+import os
+from pyrogram import Client, filters
 
-from pyrogram import filters, Client
-from pyrogram.types import Message
-
-from configs import config
-from core.bot import Bot
-from core.clients import user
-from database.lang_utils import get_message as gm
-from database.chat_database import ChatDB
+from database.userchats import get_all_chats
+from config import configs
 
 
-@Client.on_message(filters.command("gcast") & filters.user(config.OWNER_ID))
-async def gcast_(client: Client, message: Message):
+@Client.on_message(filters.command("broadcast") & filters.user(int(var.OWNER_ID)))
+async def bcast(client, message):
     if message.reply_to_message:
-        text = message.reply_to_message.text
+        MSG = message.reply_to_message
     else:
-        text = message.text[7:]
-    msg = await message.reply(gm(message.chat.id, "process_gcast"))
-    error = success = 0
-    gcast_type = ChatDB().get_chat(message.chat.id)[0]["gcast_type"]
-    sender = user if gcast_type == "user" else client
-    async for dialog in user.iter_dialogs():
-        if dialog.chat.type in ["group", "supergroup"]:
-            chat_id = dialog.chat.id
-            try:
-                success += 1
-                await asyncio.sleep(3)
-                await sender.send_message(chat_id, text)
-            except Exception as e:
-                print(e)
-                error += 1
-    return await msg.edit(
-        gm(message.chat.id, "success_gcast").format(str(success), str(error))
+        return await message.reply_text("Reply to a Message.")
+    m = await message.reply_text("`Broadcasting..`")
+    ALLCHATS = get_all_chats()
+    SUCE = 0
+    FAIL = 0
+    STR = "ERROR Report !\n\n"
+    for chat in ALLCHATS:
+        try:
+            await MSG.copy(chat)
+            SUCE += 1
+        except Exception as e:
+            FAIL += 1
+            STR += f"{chat} - {str(e)}"
+    await message.reply_text(
+        f"Successfully Broadcasted to {SUCE} Chats\nFailed - {FAIL} Chats !"
     )
+    if FAIL > 0:
+      await m.edit_text("Generating Error Report !")
+      open("ErrorReport.txt", "w").write(STR)
+      await message.reply_document("ErrorReport.txt", caption="Errors on Broadcast")
+      os.remove("ErrorReport.txt")
+    await m.delete()
 
 
-@Client.on_message(filters.command("setgcast") & filters.user(config.OWNER_ID))
-async def set_gcast_(_, message: Message):
-    chat_id = message.chat.id
-    try:
-        gcast_type = message.command[1]
-    except IndexError:
-        return await message.reply("Give me an input")
-    if gcast_type not in ["bot", "user"]:
-        return await message.reply(gm(chat_id, "invalid_gcast_type"))
-    key = ChatDB().set_gcast(chat_id, gcast_type)
-    return await Bot().send_message(chat_id, key, gcast_type)
-
-
-__cmds__ = ["gcast", "setgcast"]
-__help__ = {
-    "gcast": "help_gcast",
-    "setgcast": "help_setgcast"
-}
+@Client.on_message(filters.command("stats") & filters.user(int(var.OWNER_ID)))
+async def gistat(_, message):
+    al = get_all_chats()
+    await message.reply_text(f"Total Chats in Database - {len(al)}", quote=True)
