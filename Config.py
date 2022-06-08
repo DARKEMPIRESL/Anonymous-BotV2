@@ -2,6 +2,8 @@ import os
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', False)
 
+class Configs:
+    
 if ENVIRONMENT:
     try:
         API_ID = int(os.environ.get('API_ID', 0))
