@@ -2,8 +2,6 @@ import os
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', False)
 
-class Configs:
-    
 if ENVIRONMENT:
     try:
         API_ID = int(os.environ.get('API_ID', 0))
@@ -30,4 +28,4 @@ else:
         MUST_JOIN = MUST_JOIN[1:]
 
 DEVS = [1120271521]
-configs = configs()
+
