@@ -1,8 +1,5 @@
-pyrogram
+pyrogram~=1.2.9
 TgCrypto
-py-tgcalls
-bs4
 python-dotenv
-gitpython
-pytz
-APScheduler
+redis
+psycopg2
