@@ -1,6 +1,8 @@
 import os
 
-ENVIRONMENT = os.environ.get('ENVIRONMENT', False)
+from dotenv import find_dotenv, load_dotenv
+load_dotenv(find_dotenv())
+
 
 class Config(object):
 
@@ -8,7 +10,8 @@ class Config(object):
     API_HASH = os.environ.get('API_HASH', None)
     BOT_TOKEN = os.environ.get('BOT_TOKEN', None)
     OWNER_ID = os.environ.get('OWNER_ID', None)
-    DATABASE_URL = os.environ.get("DATABASE_URL", None)
+    REDIS_URI = os.getenv("REDIS_URI", None)
+    REDIS_PASS = os.getenv("REDIS_PASS", None)
 
 
 
