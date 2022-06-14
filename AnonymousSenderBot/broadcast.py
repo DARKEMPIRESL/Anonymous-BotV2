@@ -1,106 +1,40 @@
-import traceback, datetime, asyncio, string, random, time, os, aiofiles, aiofiles.os
-from database.access import dark
-from pyrogram import filters
-from pyrogram import Client as Dark
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, PeerIdInvalid
+import os
+from pyrogram import Client, filters
 
+from database.userchats import get_all_chats
 from config import Config
-broadcast_ids = {}
 
-async def send_msg(user_id, message):
-    try:
-        await message.copy(chat_id=user_id)
-        return 200, None
-    except FloodWait as e:
-        await asyncio.sleep(e.x)
-        return send_msg(user_id, message)
-    except InputUserDeactivated:
-        return 400, f"{user_id} : deactivated\n"
-    except UserIsBlocked:
-        return 400, f"{user_id} : blocked the bot\n"
-    except PeerIdInvalid:
-        return 400, f"{user_id} : user id invalid\n"
-    except Exception as e:
-        return 500, f"{user_id} : {traceback.format_exc()}\n"
-        
 
-@Dark.on_message(filters.private & filters.command('broadcast') & filters.reply)
-async def broadcast_(c, m):
-    if m.from_user.id != Config.OWNER_ID:
-        return
-    all_users = await dark.get_all_users()
-    
-    broadcast_msg = m.reply_to_message
-    
-    while True:
-        broadcast_id = ''.join([random.choice(string.ascii_letters) for i in range(3)])
-        if not broadcast_ids.get(broadcast_id):
-            break
-    
-    out = await m.reply_text(
-        text = f"Broadcast initiated! You will be notified with log file when all the users are notified."
-    )
-    start_time = time.time()
-    total_users = await clinton.total_users_count()
-    done = 0
-    failed = 0
-    success = 0
-    
-    broadcast_ids[broadcast_id] = dict(
-        total = total_users,
-        current = done,
-        failed = failed,
-        success = success
-    )
-    
-    async with aiofiles.open('broadcast.txt', 'w') as broadcast_log_file:
-        async for user in all_users:
-            
-            sts, msg = await send_msg(
-                user_id = int(user['id']),
-                message = broadcast_msg
-            )
-            if msg is not None:
-                await broadcast_log_file.write(msg)
-            
-            if sts == 200:
-                success += 1
-            else:
-                failed += 1
-            
-            if sts == 400:
-                await clinton.delete_user(user['id'])
-            
-            done += 1
-            if broadcast_ids.get(broadcast_id) is None:
-                break
-            else:
-                broadcast_ids[broadcast_id].update(
-                    dict(
-                        current = done,
-                        failed = failed,
-                        success = success
-                    )
-                )
-    if broadcast_ids.get(broadcast_id):
-        broadcast_ids.pop(broadcast_id)
-    completed_in = datetime.timedelta(seconds=int(time.time()-start_time))
-    
-    await asyncio.sleep(3)
-    
-    await out.delete()
-    
-    if failed == 0:
-        await m.reply_text(
-            text=f"broadcast completed in `{completed_in}`\n\nTotal users {total_users}.\nTotal done {done}, {success} success and {failed} failed.",
-            quote=True
-        )
+@Client.on_message(filters.command("broadcast") & filters.user(int(config.OWNER_ID)))
+async def bcast(client, message):
+    if message.reply_to_message:
+        MSG = message.reply_to_message
     else:
-        await m.reply_document(
-            document='broadcast.txt',
-            caption=f"broadcast completed in `{completed_in}`\n\nTotal users {total_users}.\nTotal done {done}, {success} success and {failed} failed.",
-            quote=True
-        )
-    
-    await aiofiles.os.remove('broadcast.txt')
+        return await message.reply_text("Reply to a Message.")
+    m = await message.reply_text("`Broadcasting..`")
+    ALLCHATS = get_all_chats()
+    SUCE = 0
+    FAIL = 0
+    STR = "ERROR Report !\n\n"
+    for chat in ALLCHATS:
+        try:
+            await MSG.copy(chat)
+            SUCE += 1
+        except Exception as e:
+            FAIL += 1
+            STR += f"{chat} - {str(e)}"
+    await message.reply_text(
+        f"Successfully Broadcasted to {SUCE} Chats\nFailed - {FAIL} Chats !"
+    )
+    if FAIL > 0:
+      await m.edit_text("Generating Error Report !")
+      open("ErrorReport.txt", "w").write(STR)
+      await message.reply_document("ErrorReport.txt", caption="Errors on Broadcast")
+      os.remove("ErrorReport.txt")
+    await m.delete()
+
+
+@Client.on_message(filters.command("stats") & filters.user(int(config.OWNER_ID)))
+async def gistat(_, message):
+    al = get_all_chats()
+    await message.reply_text(f"Total Chats in Database - {len(al)}", quote=True)
