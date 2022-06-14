@@ -4,7 +4,7 @@ from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 
 
-class Config(object):
+class Config:
 
     API_ID = int(os.environ.get('API_ID', 0))
     API_HASH = os.environ.get('API_HASH', None)
