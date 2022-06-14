@@ -2,7 +2,7 @@ import os
 from pyrogram import Client, filters
 
 from database.userchats import get_all_chats
-from config import Config
+from Config import Config
 
 
 @Client.on_message(filters.command("broadcast") & filters.user(int(config.OWNER_ID)))
