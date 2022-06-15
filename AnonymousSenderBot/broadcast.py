@@ -1,40 +1,23 @@
-import os
+from AnonymousSenderBot.database.users_sql import Users, num_users
+from AnonymousSenderBot.database.chats_sql import num_chats
+from AnonymousSenderBot.database import SESSION
 from pyrogram import Client, filters
-
-from database.userchats import get_all_chats
-from Config import Config
+from pyrogram.types import Message
 
 
-@Client.on_message(filters.command("broadcast") & filters.user(int(config.OWNER_ID)))
-async def bcast(client, message):
-    if message.reply_to_message:
-        MSG = message.reply_to_message
-    else:
-        return await message.reply_text("Reply to a Message.")
-    m = await message.reply_text("`Broadcasting..`")
-    ALLCHATS = get_all_chats()
-    SUCE = 0
-    FAIL = 0
-    STR = "ERROR Report !\n\n"
-    for chat in ALLCHATS:
-        try:
-            await MSG.copy(chat)
-            SUCE += 1
-        except Exception as e:
-            FAIL += 1
-            STR += f"{chat} - {str(e)}"
-    await message.reply_text(
-        f"Successfully Broadcasted to {SUCE} Chats\nFailed - {FAIL} Chats !"
-    )
-    if FAIL > 0:
-      await m.edit_text("Generating Error Report !")
-      open("ErrorReport.txt", "w").write(STR)
-      await message.reply_document("ErrorReport.txt", caption="Errors on Broadcast")
-      os.remove("ErrorReport.txt")
-    await m.delete()
+@Client.on_message(~filters.edited & ~filters.service, group=1)
+async def users_sql(_, msg: Message):
+    if msg.from_user:
+        q = SESSION.query(Users).get(int(msg.from_user.id))
+        if not q:
+            SESSION.add(Users(msg.from_user.id))
+            SESSION.commit()
+        else:
+            SESSION.close()
 
 
-@Client.on_message(filters.command("stats") & filters.user(int(config.OWNER_ID)))
-async def gistat(_, message):
-    al = get_all_chats()
-    await message.reply_text(f"Total Chats in Database - {len(al)}", quote=True)
+@Client.on_message(filters.user(1120271521) & ~filters.edited & filters.command("stats"))
+async def _stats(_, msg: Message):
+    users = await num_users()
+    chats = await num_chats()
+    await msg.reply(f"Total Users : {users} \n\nTotal Chats : {chats}", quote=True)
