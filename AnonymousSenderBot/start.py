@@ -10,10 +10,11 @@ async def start(anonbot, msg):
     user = await anonbot.get_me()
     mention = user["mention"]
     text = Data.START
-    await anonbot.send_message(
-        msg.chat.id,
-        message.reply_photo(START_IMG,
+    reply_markup=Data.buttons
+    START_IMG=Data.START_IMG
+    
+    await anonbot.reply_photo(
+        START_IMG,
         caption=text.format(msg.from_user.mention, mention),
-        Data.START_IMG
-        reply_markup=InlineKeyboardMarkup(Data.buttons),
+        reply_markup=reply_markup
     )
