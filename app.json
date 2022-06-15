@@ -29,31 +29,23 @@
       "description": "Obtain a Telegram bot token by contacting @BotFather",
       "required": true,
       "value": ""
-    },
-    "OWNER_ID": {
-      "description": "Obtain a Telegram bot token by contacting @BotFather",
-      "required": true,
-      "value": ""
-    },
-    "REDIS_URI": {
-      "description": "Redis URL, Get it from redislabs.com",
-      "value": ""
-    },
-    "REDIS_PASS": {
-      "description": "Redis Password, Get it from redislabs.com",
-      "value": ""
     }
   },
-  "buildpacks": [{
+    "buildpacks": [{
     "url": "heroku/python"
-  },
-  {
-    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
   }],
   "formation": {
     "worker": {
       "quantity": 1,
       "size": "free"
     }
-  }
+  },
+  "addons": [
+      {
+         "options": {
+            "version": "12"
+         },
+         "plan": "heroku-postgresql"
+      }
+   ]
 }
