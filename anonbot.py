@@ -8,12 +8,14 @@ logging.basicConfig(
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
+plugins=dict(root="AnonymousSenderBot")
+
 app = Client(
     "Anonymous-Sender-Bot",
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
     bot_token=Config.BOT_TOKEN,
-    plugins=dict(root="AnonymousSenderBot"),
+    plugins=plugins
 )
 
 # Run Bot
@@ -26,7 +28,7 @@ if __name__ == "__main__":
         raise Exception("Your BOT_TOKEN is not valid.")
     uname = app.get_me().username
     print(f"@{uname} Started Successfully!")
-    idle()
+    pyrogram.idle()
     app.stop()
     print("Bot stopped. Alvida!")
     
