@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardMarkup
 
 # Copy Message
 @Client.on_message(
-    filters.private & ~filters.edited & ~filters.command(["start", "about", "help"])
+    filters.private & ~filters.command(["start", "about", "help", "stats", "id"])
 )
 async def copy(_, msg):
     if msg.caption:
