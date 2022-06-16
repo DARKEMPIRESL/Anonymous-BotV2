@@ -10,7 +10,7 @@ async def start(anonbot, msg):
     user = await anonbot.get_me()
     text = Data.START
     reply_markup=Data.buttons
-    START_IMG=Data.START_IMG
+    START_IMG = "https://telegra.ph/file/89662416f1623875c1a03.jpg"
     
     await anonbot.reply_photo(
         START_IMG,
