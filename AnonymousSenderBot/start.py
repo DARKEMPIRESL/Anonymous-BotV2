@@ -8,7 +8,6 @@ from pyrogram.types import  InlineKeyboardMarkup, InlineKeyboardButton, InputMed
 async def start(anonbot, msg):
     print("/start")
     user = await anonbot.get_me()
-    mention = user["mention"]
     text = Data.START
     reply_markup=Data.buttons
     START_IMG=Data.START_IMG
