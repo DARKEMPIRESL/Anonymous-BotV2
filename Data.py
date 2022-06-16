@@ -43,4 +43,3 @@ Developer : @ImDark_Empire
         [InlineKeyboardButton("🛫 Support Group 🛫", url="https://t.me/SLBotsChat")],
     ]
 
-START_IMG = "https://telegra.ph/file/89662416f1623875c1a03.jpg"
