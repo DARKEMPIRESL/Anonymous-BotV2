@@ -8,12 +8,9 @@ from pyrogram.types import  InlineKeyboardMarkup, InlineKeyboardButton, InputMed
 async def start(anonbot, msg):
     print("/start")
     user = await anonbot.get_me()
-    text = Data.START
-    reply_markup=Data.buttons
-    START_IMG = "https://telegra.ph/file/89662416f1623875c1a03.jpg"
-    
-    await anonbot.reply_photo(
-        START_IMG,
-        caption=text.format(msg.from_user.mention, mention),
-        reply_markup=reply_markup
+    mention = user["mention"]
+    await anonbot.send_message(
+        msg.chat.id,
+        Data.START.format(msg.from_user.mention, mention),
+        reply_markup=InlineKeyboardMarkup(Data.buttons),
     )
