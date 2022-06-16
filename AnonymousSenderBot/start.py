@@ -11,6 +11,6 @@ async def start(anonbot, msg):
     mention = user["mention"]
     await anonbot.send_message(
         msg.chat.id,
-        Data.START.format(msg.from_user.mention, mention),
-        reply_markup=InlineKeyboardMarkup(Data.buttons),
+        Data.START,
+        reply_markup=InlineKeyboardMarkup(Data.buttons)
     )
