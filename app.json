@@ -9,7 +9,7 @@
     "pyrogram"
   ],
   "repository": "https://github.com/DARKEMPIRESL/Anonymous-BotV2",
-  "stack": "heroku22",
+  
   "env": {
     "ENVIRONMENT": {
       "description": "Don't change ANYTHING.",
