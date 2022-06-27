@@ -25,6 +25,11 @@
       "required": true,
       "value": ""
     },
+    "DATABASE_URL": {
+      "description": "Get this value from my.telegram.org.",
+      "required": true,
+      "value": ""
+    },
     "BOT_TOKEN": {
       "description": "Obtain a Telegram bot token by contacting @BotFather",
       "required": true,
