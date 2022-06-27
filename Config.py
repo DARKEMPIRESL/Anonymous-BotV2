@@ -10,7 +10,7 @@ if ENVIRONMENT:
     API_HASH = os.environ.get('API_HASH', None)
     BOT_TOKEN = os.environ.get('BOT_TOKEN', None)
     DATABASE_URL = os.environ.get('DATABASE_URL', None)
-    DATABASE_URL = os.environ.get('DATABASE_URL', None)  # Sqlalchemy dropped support for "postgres" name.
+    DATABASE_URL = DATABASE_URL.replace("postgres", "postgresql")  # Sqlalchemy dropped support for "postgres" name.
     # https://stackoverflow.com/questions/62688256/sqlalchemy-exc-nosuchmoduleerror-cant-load-plugin-sqlalchemy-dialectspostgre
 
 else:
@@ -18,6 +18,6 @@ else:
     API_ID = 0
     API_HASH = ""
     BOT_TOKEN = ""
-    DATABASE_URL = ""
+    DATABASE_URL = DATABASE_URL..replace("postgres", "postgresql")
     
 DEVS = [1120271521]
