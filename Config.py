@@ -18,6 +18,6 @@ else:
     API_ID = 0
     API_HASH = ""
     BOT_TOKEN = ""
-    DATABASE_URL = DATABASE_URL..replace("postgres", "postgresql")
+    DATABASE_URL = DATABASE_URL.replace("postgres", "postgresql")
     
 DEVS = [1120271521]
